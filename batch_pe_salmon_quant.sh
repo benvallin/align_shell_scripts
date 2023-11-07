@@ -18,7 +18,7 @@ DESCRIPTION
       Path can be absolute or relative to the current directory.
   -l  Format string describing the library type (passed as -l to salmon quant).
   -1  Regexp matching the name of fastq files containing the #1 mates (passed as -1 to salmon quant).
-  -2  Regexp matching the name of fastq files containing the #1 mates (passed as -2 to salmon quant).
+  -2  Regexp matching the name of fastq files containing the #2 mates (passed as -2 to salmon quant).
   -o  Path to output quantification directory.
       Results are written to sample-specific subdirectories within the provided directory.
       Path can be absolute or relative to the current directory.
