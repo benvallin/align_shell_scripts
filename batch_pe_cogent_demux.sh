@@ -3,11 +3,11 @@
 ### Define help message
 HELP='
 NAME
-  batch_cogent_demux.sh - run cogent demux iteratively on a set of PE samples 
+  batch_pe_cogent_demux.sh - run cogent demux iteratively on a set of PE samples 
 
 SYNOPSIS
-  batch_cogent_demux.sh -s -b -o [-t -1 -2 -n -u -S -g]
-  batch_cogent_demux.sh -h
+  batch_pe_cogent_demux.sh -s -b -o [-t -1 -2 -n -u -S -g]
+  batch_pe_cogent_demux.sh -h
 
 DESCRIPTION
   Run cogent demux on a set of PE samples.
