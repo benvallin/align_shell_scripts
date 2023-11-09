@@ -10,7 +10,7 @@ SYNOPSIS
   batch_pe_trim_galore.sh -h
 
 DESCRIPTION
-  Run fastqc on a set of PE samples.
+  Run trim_galore on a set of PE samples.
   -s  File listing the samples to operate on.
       Each line should contain the path to a sample-specific directory containing fastq files.
       Path can be absolute or relative to the current directory.
@@ -34,17 +34,17 @@ DESCRIPTION
       Adapter sequence to be trimmed off read 2 is the first 12bp of the Illumina Small RNA 5p adapter 'GATCGTCGGACT'.
       Selecting to trim Small RNA adapters will also lower the -m value to 18bp (passed as --small_rna to trim_galore). 
       See option \"--small_rna\" in \"trim_galore --help\".
-  -j  The number of cores to be used for trimming (passed as -j to trim_galore). Default is 8.
+  -j  The number of cores to be used for trimming (passed as -j to trim_galore). Equivalent to option \"-j\" in \"cutadapt --help\". Default is 8.
   -q  Trim low-quality ends from reads in addition to adapter removal (passed as -q to trim_galore).
       See option \"-q\" in \"trim_galore --help\". Relates to (but may differ from) option \"-q\" in \"cutadapt --help\"). Default is 20.
   -O  Overlap with adapter sequence required to trim a sequence (passed as --stringency to trim_galore).
       See option \"--stringency\" in \"trim_galore --help\". Equivalent to option \"-O\" in \"cutadapt --help\". Default is 3.
   -m  Discard reads that became shorter than input value because of either quality or adapter trimming (passed as --length to trim_galore).
-    See option \"--length\" in \"trim_galore --help\". Equivalent to option \"-m\" in \"cutadapt --help\"). Default is 20.
+      See option \"--length\" in \"trim_galore --help\". Equivalent to option \"-m\" in \"cutadapt --help\". Default is 20.
   -M  The total number of Ns a read may contain before it will be removed altogether (passed as --max_n to trim_galore).
       See option \"--max_n\" in \"trim_galore --help\". Equivalent to option \"--max-n\" in \"cutadapt --help\". 
   -t  Removes Ns from either side of the read (passed as --trim-n to trim_galore).
-      See option \"--trim-n\" in \"trim_galore --help\". Equivalent to option \"-m\" in \"cutadapt --help\".
+      See option \"--trim-n\" in \"trim_galore --help\". Equivalent to option \"--trim-n\" in \"cutadapt --help\".
   -h  Print this help.\n
 '
 
