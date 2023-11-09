@@ -197,6 +197,12 @@ do
   CURRENT_SAMPLE=$((CURRENT_SAMPLE+1))
   printf "\n\n--->JOB $CURRENT_SAMPLE/$N_SAMPLES: PROCESSING SAMPLE $(basename $i)<---\n\n" 
 
+  # => Create output directory if it does not exist already
+  if ! [[ -d "$OUTDIR/$(basename $i)" ]]
+  then 
+    mkdir -p "$OUTDIR/$(basename $i)"
+  fi
+
   trim_galore "${TRIM_GALORE_ARGS[@]}" -o "$OUTDIR"/$(basename "$i")/ $(find "$i" -name "$NAMES" | sort)
     
   printf "\n\n--->JOB $CURRENT_SAMPLE/$N_SAMPLES COMPLETE<---\n"
