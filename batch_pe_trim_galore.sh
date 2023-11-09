@@ -17,7 +17,7 @@ DESCRIPTION
   -o  Path to output directory.
       Trimmed reads are written to sample-specific subdirectories within the provided directory.
       Path can be absolute or relative to the current directory.
-  -n  Regexp matching the name of fastq files to trim. Default is \"*fastq.gz\".
+  -n  find regexp matching the name of fastq files to trim. Default is \"*fastq.gz\".
       trim_galore expects paired-end files to be supplied in a pairwise fashion (e.g. file1_1.fq file1_2.fq file2_1.fq file2_2.fq).
       So, make sure the provided regex allows \"$(find path_to_sample_specific_directory -name regexp | sort)\" to return files in correct order.
   -a  Adapter sequence to be trimmed off read 1 (passed as -a to trim_galore).

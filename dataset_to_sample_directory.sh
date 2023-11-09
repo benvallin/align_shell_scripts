@@ -15,8 +15,8 @@ DESCRIPTION
       File names should contain the ID of the corresponding sample. 
   -o  Path to output directory. Can be absolute or relative to the current directory.
       Files are moved to sample-specific subdirectories within the provided directory.
-  -n  Regexp matching the name of fastq files to move. Default is \"*fastq.gz\".
-  -p  Regexp matching a string to remove from the file names in order to generate sample-specific names. Default is \"_R[12].*$\".
+  -n  find regexp matching the name of fastq files to move. Default is \"*fastq.gz\".
+  -p  sed regexp matching a string to remove from the file names in order to generate sample-specific names. Default is \"_R[12].*$\".
   -h  Print this help.\n
 '
 

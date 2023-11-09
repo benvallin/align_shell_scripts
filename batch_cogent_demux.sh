@@ -20,8 +20,8 @@ DESCRIPTION
       Results are written to barcode-specific subdirectories within the provided directory.
       Path can be absolute or relative to the current directory.
   -t  Format string describing the experimental protocol used (passed as -t to cogent demux). Default is \"ICELL8_FLA\".
-  -1  Regexp matching the name of fastq files containing the #1 mates. Default is \"*_R1_*\".
-  -2  Regexp matching the name of fastq files containing the #1 mates. Default is \"*_R2_*\".
+  -1  find regexp matching the name of fastq files containing the #1 mates. Default is \"*_R1_*\".
+  -2  find regexp matching the name of fastq files containing the #1 mates. Default is \"*_R2_*\".
   -n  The number of demultiplexing processes to use concurrently (passed as -n to cogent demux). Default is 8.
   -u  Save undetermined/unselected/short reads to undetermined FASTQ files (passed as --undetermined_fq to cogent demux).
   -S  Output merged FASTQ files (passed as --no_split_fastqs to cogent demux). 

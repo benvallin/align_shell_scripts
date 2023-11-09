@@ -16,7 +16,7 @@ DESCRIPTION
       Path can be absolute or relative to the current directory.
   -o  Path to output directory (passed as -o to fastqc).
       Path can be absolute or relative to the current directory.
-  -n  Regexp matching the name of fastq files to parse. Default is \"*fastq.gz\".
+  -n  find regexp matching the name of fastq files to parse. Default is \"*fastq.gz\".
   -t  The number of threads to use concurrently (passed as -t to fastqc). Default is 8.
   -h  Print this help.\n
 '

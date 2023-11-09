@@ -16,7 +16,7 @@ DESCRIPTION
       Path can be absolute or relative to the current directory. File names should contain the ID of the corresponding barcode. 
   -o  Path to output directory. Can be absolute or relative to the current directory.
       Files are moved to barcode-specific subdirectories within the provided directory.
-  -p  Regexp matching a string to remove from the file names in order to generate barcode-specific names. Default is \"_R[12].*$\".
+  -p  sed regexp matching a string to remove from the file names in order to generate barcode-specific names. Default is \"_R[12].*$\".
   -d  If provided, the input sample-specific directories are deleted once the job is complete.
   -h  Print this help.\n
 '
