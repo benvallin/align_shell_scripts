@@ -28,7 +28,7 @@ DESCRIPTION
   -d  Allow dovetailing mappings (passed as --allowDovetail to salmon quant).
   -D  Dump the simple equivalence class counts that were computed during mapping or alignment (passed as --dumpEq to salmon quant).
   -w  Write the names of un-mapped reads to the file unmapped_names.txt in the auxiliary directory (passed as --writeUnmappedNames to salmon quant).
-  -b  Produce coordinate-sorted BAM files of selective-alignment results (pass --writeUnmappedNames to salmon quant and pipe to samtools view/sort).
+  -b  Produce coordinate-sorted BAM files of selective-alignment results (pass --writeMappings to salmon quant and pipe to samtools view/sort).
   -h  Print this help.\n
 '
 
