@@ -6,7 +6,7 @@ NAME
   batch_pe_cutadapt.sh - run cutadapt iteratively on a set of PE samples
 
 SYNOPSIS
-  batch_pe_cutadapt.sh -s -o [-n -a -A -j -O -m -q -M -t]
+  batch_pe_cutadapt.sh -s -o [-n -a -A -j -m -q -M -O -t]
   batch_pe_cutadapt.sh -h
 
 DESCRIPTION
@@ -23,16 +23,16 @@ DESCRIPTION
   -a  Adapter sequence to be trimmed off read 1 (passed as -a to cutadapt).
   -A  Adapter sequence to be trimmed off read 2 (passed as -A to cutadapt).
   -j  The number of cores to be used for trimming (passed as -j to cutadapt). Default is 8.
-  -O  Require minimum length overlap between read and adapter for an adapter to be found. (passed as -O to cutadapt). Default is 3.
   -m  Discard reads that became shorter than input value because of either quality or adapter trimming (passed as -m to cutadapt). Default is 0.
   -q  Quality cutoff score for trimming low-quality bases from 3 prime ends of each read before adapter removal. (passed as -q to cutadapt).
   -M  Discard reads with more Ns than provided number. Interpreted as a fraction of the read length if between 0 and 1. (passed as --max-n to cutadapt).
+  -O  Require minimum length overlap between read and adapter for an adapter to be found. (passed as -O to cutadapt). Default is 3.
   -t  Trim Ns on ends of reads (passed as --trim-n to cutadapt).
   -h  Print this help.\n
 '
 
 ### Parse option arguments
-while getopts ":hs:o:n:a:A:j:O:m:q:M:t" opt
+while getopts ":hs:o:n:a:A:j:m:q:M:O:t" opt
 do
   case $opt in
     h) printf "$HELP"
@@ -50,13 +50,13 @@ do
     ;;
     j) THREADS="$OPTARG"
     ;;
-    O) MINLENGTH="$OPTARG"
-    ;;
     m) LENGTH="$OPTARG"
     ;;
     q) QUALITY="$OPTARG"
     ;;
     M) MAXN="$OPTARG"
+    ;;
+    O) MINLENGTH="$OPTARG"
     ;;
     t) TRIMN="--trim-n"
     ;;
@@ -93,7 +93,7 @@ CUTADAPT_ARGS=()
 # => Check that user provided adapters sequences and add them to cutadapt's arguments (-a and -A)
 if [[ -v ADAPTR1 ]] && [[ -v ADAPTR2 ]]
 then
-  CUTADAPT_ARGS+=(-a $ADAPTR1 -A $ADAPTR2)
+  CUTADAPT_ARGS+=(-a $ADAPTR1 -A $ADAPTR2 -j $THREADS)
 elif ! [[ -v ADAPTR1 ]] && ! [[ -v ADAPTR2 ]]
 then
   printf "batch_pe_cutadapt needs user-provided adapters sequences. Please provide both -a and -A.\n"
@@ -104,11 +104,7 @@ then
   exit 1
 fi
 
-# => Add systematic arguments to cutadapt's arguments
-CUTADAPT_ARGS+=(-j $THREADS)
-
-# => Add -m VALUE, -q VALUE, -O VALUE, --max-n VALUE and --trim-n to cutadapt's arguments if provided 
-# => Set length to default value if not provided
+# => Add -m VALUE, -q VALUE, --max-n VALUE, -O VALUE and --trim-n to cutadapt's arguments if provided 
 if [[ -v LENGTH ]]
 then
   CUTADAPT_ARGS+=(-m $LENGTH)
@@ -119,14 +115,14 @@ then
   CUTADAPT_ARGS+=(-q $QUALITY)
 fi
 
-if [[ -v MINLENGTH ]]
-then 
-  CUTADAPT_ARGS+=(-O $MINLENGTH)
-fi
-
 if [[ -v MAXN ]]
 then
   CUTADAPT_ARGS+=(--max-n $MAXN)
+fi
+
+if [[ -v MINLENGTH ]]
+then 
+  CUTADAPT_ARGS+=(-O $MINLENGTH)
 fi
 
 if [[ -v TRIMN ]]
@@ -154,8 +150,8 @@ do
 
   cutadapt \
   "${CUTADAPT_ARGS[@]}" \
-  -o "$OUTDIR"/$(basename "$i")/$(basename "$i")_R1.fastq.gz \
-  -p "$OUTDIR"/$(basename "$i")/$(basename "$i")_R2.fastq.gz \
+  -o "$OUTDIR"/$(basename "$i")/$(basename "$i")_trim_R1.fastq.gz \
+  -p "$OUTDIR"/$(basename "$i")/$(basename "$i")_trim_R2.fastq.gz \
   $(find "$i" -name "$NAMES" | sort) 
     
   printf "\n\n--->JOB $CURRENT_SAMPLE/$N_SAMPLES COMPLETE<---\n"
