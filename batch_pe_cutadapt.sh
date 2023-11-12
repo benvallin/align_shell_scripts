@@ -81,18 +81,6 @@ then
   NAMES="*fastq.gz"
 fi
 
-# => Set min length to default value if not provided
-if ! [[ -v MINLENGTH ]]
-then 
-  MINLENGTH=3
-fi
-
-# => Set length to default value if not provided
-if ! [[ -v LENGTH ]]
-then 
-  LENGTH=0
-fi
-
 # => Set n threads to default value if not provided
 if ! [[ -v THREADS ]]
 then 
@@ -117,12 +105,23 @@ then
 fi
 
 # => Add systematic arguments to cutadapt's arguments
-CUTADAPT_ARGS+=(-O $MINLENGTH -m $LENGTH -j $THREADS)
+CUTADAPT_ARGS+=(-j $THREADS)
 
-# => Add -q VALUE, --max-n VALUE and --trim-n to cutadapt's arguments if provided 
+# => Add -m VALUE, -q VALUE, -O VALUE, --max-n VALUE and --trim-n to cutadapt's arguments if provided 
+# => Set length to default value if not provided
+if [[ -v LENGTH ]]
+then
+  CUTADAPT_ARGS+=(-m $LENGTH)
+fi
+
 if [[ -v QUALITY ]]
 then
   CUTADAPT_ARGS+=(-q $QUALITY)
+fi
+
+if [[ -v MINLENGTH ]]
+then 
+  CUTADAPT_ARGS+=(-O $MINLENGTH)
 fi
 
 if [[ -v MAXN ]]
