@@ -121,7 +121,7 @@ do
   CURRENT_SAMPLE=$((CURRENT_SAMPLE+1))
   printf "\n\n--->JOB $CURRENT_SAMPLE/$N_SAMPLES: PROCESSING SAMPLE $(basename $i)<---\n\n"
   
-  cogent demux "${COGENT_ARGS[@]}" \
+  bash cogent demux "${COGENT_ARGS[@]}" \
   -i $(find "$i" -name "$MATES1") \
   -p $(find "$i" -name "$MATES2") \
   -o "$OUTDIR"/$(basename "$i")/
