@@ -6,7 +6,7 @@ NAME
   batch_pe_cogent_demux.sh - run cogent demux iteratively on a set of PE samples 
 
 SYNOPSIS
-  batch_pe_cogent_demux.sh -s -b -o [-t -1 -2 -n -u -S -g]
+  batch_pe_cogent_demux.sh -s -b -o [-t -1 -2 -n -m -u -S -g]
   batch_pe_cogent_demux.sh -h
 
 DESCRIPTION
@@ -22,7 +22,8 @@ DESCRIPTION
   -t  Format string describing the experimental protocol used (passed as -t to cogent demux). Default is \"ICELL8_FLA\".
   -1  find regexp matching the name of fastq files containing the #1 mates. Default is \"*_R1_*\".
   -2  find regexp matching the name of fastq files containing the #1 mates. Default is \"*_R2_*\".
-  -n  The number of demultiplexing processes to use concurrently (passed as -n to cogent demux). Default is 8.
+  -n  The number of demultiplexing processes to use concurrently (passed as -n to cogent demux). Default is 16.
+  -m  The number of writing processes to use concurrently (passed as --n_writers to cogent demux). Default is 1.
   -u  Save undetermined/unselected/short reads to undetermined FASTQ files (passed as --undetermined_fq to cogent demux).
   -S  Output merged FASTQ files (passed as --no_split_fastqs to cogent demux). 
       Barcodes are written into read names and merged into large FASTQ file. 
@@ -31,7 +32,7 @@ DESCRIPTION
 '
 
 ### Parse option arguments
-while getopts ":hs:b:o:t:1:2:n:uSg" opt
+while getopts ":hs:b:o:t:1:2:n:m:uSg" opt
 do
   case $opt in
     h) printf "$HELP"
@@ -49,7 +50,9 @@ do
     ;;
     2) MATES2="$OPTARG"
     ;;
-    n) THREADS="$OPTARG"
+    n) DTHREADS="$OPTARG"
+    ;;
+    m) WTHREADS="$OPTARG"
     ;;
     u) UNDETERMINED="--undetermined_fq"
     ;;
@@ -91,16 +94,22 @@ then
 fi
 
 # => Set n threads to default value if not provided
-if ! [[ -v THREADS ]]
+if ! [[ -v DTHREADS ]]
 then 
-  THREADS=8
+  DTHREADS=16
+fi
+
+# => Set n writing threads to default value if not provided
+if ! [[ -v WTHREADS ]]
+then 
+  WTHREADS=1
 fi
 
 ### Construct Cogent's arguments
 COGENT_ARGS=()
 
 # => Add systematic arguments to Cogent's arguments
-COGENT_ARGS+=(-b $WELLS -t $EXPTYPE -n $THREADS)
+COGENT_ARGS+=(-b $WELLS -t $EXPTYPE -n $DTHREADS --n_writers $WTHREADS)
 
 # => Add --undetermined_fq, --no_split_fastqs and --no_gz to Cogent's arguments if provided 
 OPTIONAL_ARGS="$UNDETERMINED $NOSPLIT $NOGZ"
