@@ -6,7 +6,7 @@ NAME
   batch_pe_salmon_quant.sh - run salmon quant iteratively on a set of PE samples 
 
 SYNOPSIS
-  batch_pe_salmon_quant.sh -s -i -l -1 -2 -o [-p -g -S -d -D -w -b]
+  batch_pe_salmon_quant.sh -s -i -l -1 -2 -o [-p -g -S -d -D -w -b -G]
   batch_pe_salmon_quant.sh -h
 
 DESCRIPTION
@@ -29,11 +29,13 @@ DESCRIPTION
   -D  Dump the simple equivalence class counts that were computed during mapping or alignment (passed as --dumpEq to salmon quant).
   -w  Write the names of un-mapped reads to the file unmapped_names.txt in the auxiliary directory (passed as --writeUnmappedNames to salmon quant).
   -b  Produce coordinate-sorted BAM files of selective-alignment results (pass --writeMappings to salmon quant and pipe to samtools view/sort).
+  -G  Number of Gibbs sampling replicates to generate for assessing technical quantification uncertainty (passed as --numGibbsSamples to salmon quant).
+      Must be a positive integer. Optional; if omitted, Gibbs resampling is not performed.
   -h  Print this help.\n
 '
 
 ### Parse option arguments
-while getopts ":hs:i:l:1:2:o:p:gSdDwb" opt
+while getopts ":hs:i:l:1:2:o:p:gSdDwbG:" opt
 do
   case $opt in
     h) printf "$HELP"
@@ -65,6 +67,8 @@ do
     ;;
     b) BAM="--writeMappings"
     ;;
+    G) NUM_GIBBS="$OPTARG"
+    ;;
     \?) printf "Invalid option -$OPTARG\n"
     exit 1
     ;;
@@ -86,6 +90,13 @@ then
   THREADS=8
 fi
 
+# => Validate -G if provided (Gibbs resampling is off by default -- no default value is set)
+if [[ -v NUM_GIBBS ]] && ! [[ "$NUM_GIBBS" =~ ^[0-9]+$ && "$NUM_GIBBS" -ge 1 ]]
+then
+  printf "Option -G requires a positive integer argument\n"
+  exit 1
+fi
+
 ### Construct Salmon's arguments
 SALMON_ARGS=()
 
@@ -98,6 +109,12 @@ OPTIONAL_ARGS="$GCBIAS $SEQBIAS $ALLOWDOVETAIL $DUMPEQ $WRITEUNMAPPEDNAMES"
 for i in "$OPTIONAL_ARGS"
 do SALMON_ARGS+=($i)
 done
+
+# => Add --numGibbsSamples to Salmon's arguments if provided
+if [[ -v NUM_GIBBS ]]
+then
+  SALMON_ARGS+=(--numGibbsSamples "$NUM_GIBBS")
+fi
 
 ### Record samples details
 N_SAMPLES=$(cat "$SAMPLES" | wc -l)
